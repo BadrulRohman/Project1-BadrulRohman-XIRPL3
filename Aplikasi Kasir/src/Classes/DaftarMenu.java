@@ -15,7 +15,7 @@ public class DaftarMenu {
     public DaftarMenu () {
     daftarMenu = new ArrayList <> () ;
     }
-    public void tamahMenu (Menu menu) {
+    public void tambahMenu (Menu menu) {
     daftarMenu.add(menu);
     }
     public void getMenuByKategori (String kategori) {
@@ -30,10 +30,10 @@ public class DaftarMenu {
     }
     public void tampilDaftarMenu() {
         System.out.println("===== ALDERBAIN ====");
-        getMenuByKategori("Ramen");
-        getMenuByKategori("Minmuman");
-        getMenuByKategori("Toping");
-        getMenuByKategori("Kuah");
+       getMenuByKategori("Ramen");
+       getMenuByKategori("Kuah");
+       getMenuByKategori("Toping");
+       getMenuByKategori("Minuman");
     }
     
 }
