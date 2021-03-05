@@ -7,9 +7,13 @@ package Main;
 
 import Classes.DaftarMenu;
 import Classes.Kuah;
+import Classes.Menu;
 import Classes.Minuman;
+import Classes.Pesanan;
 import Classes.Ramen;
 import Classes.Toping;
+import Classes.Transaksi;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -20,6 +24,8 @@ import java.util.Scanner;
  * @author Asus-X441S
  */
 public class MainAplikasiKasir {
+
+
         
     public DaftarMenu daftarMenu;
 //Tambahkan
@@ -31,16 +37,111 @@ public static double BIAYA_SERVICE = 0.05;
 public static void main (String [ ] args) {
 //
 Scanner input = new Scanner (System. in);
+
 //
 
 String no_transaksi, nama_pemesan, tanggal, no_meja = " ";
 String transaksi_lagi = " ", pesan_lagi =" ", keterangan= " ", makan_ditempat;
 int jumlah_pesanan, no_menu; 
 //End Of Tambahkan
+        MainAplikasiKasir app = new MainAplikasiKasir ();
+        
+        app.generateDaftarMenu();
+        //mulai transaksi
+
+System.out.println ("========= TRANSAKSI ==========");
+//ambil data transaksi
+do {
+System.out.print("No Transaksi :  ");
+no_transaksi = input.next ();
+System.out.print("Pemesan : ");
+nama_pemesan = input.next ( );
+System.out.print("Tanggal [dd-mm-yyyy] ");
+tanggal = input.next ();
+System.out.print ("Makan ditempat ? [Y/N]");
+makan_ditempat = input.next ();
+
+if (makan_ditempat.equalsIgnoreCase ("Y")) {
+    System.out.print ("Nomor Meja: ");
+    no_meja = input.next ();
 }
+
+Transaksi trans = new Transaksi (no_transaksi, nama_pemesan, tanggal, no_meja);
+System.out.println("======= PESANAN =======");
+int no_kuah;
+do{
+    //ambil menu berdasarkan nomor urut yang dipilih
+    Menu menu_yang_dipilih = app.daftarMenu.pilihMenu();
+    
+    jumlah_pesanan = (int) app.cekInputNumber("jumlah: ");
+    
+    // buat pesanan
+    
+    Pesanan pesanan = new Pesanan(menu_yang_dipilih, jumlah_pesanan);
+    trans.tambahPesanan(pesanan);
+    
+    // khusus menu ramen , pesnan kuahnya klangsung fiinput juga 
+    if (menu_yang_dipilih.getKategori().equals("Ramen")){
+        int jumlah_ramen = jumlah_pesanan;
+        
+       do{
+           
+           Menu kuah_yang_dipilih = app.daftarMenu.pilihKuah();
+           
+           System.out.print("Level : [0-5] : ");
+           String level =input.next();
+           
+           // validasi jumlah kuah tidk boleh lebih besar dari jumlah ramen
+           int jumlah_kuah= 0;
+           
+           do{
+               jumlah_kuah = (int) app.cekInputNumber("jumlah : ");
+               
+               if(jumlah_kuah > jumlah_ramen)
+               {
+                   System.out.println ("[Err] Jumlah kuah melebihi jimlah pesanan ramen yang dipesan");
+               } else {
+                   break ;
+               }
+           } while (jumlah_kuah > jumlah_ramen);
+           
+           // pesanan kuah set
+           Pesanan pesanan_kuah = new Pesanan(kuah_yang_dipilih, jumlah_kuah);
+           pesanan_kuah.setKeterangan("Level " + level);
+    
+           
+           trans.tambahPesanan(pesanan_kuah);
+           
+           //jumlah hitung ramen yang belum dipesan kuah
+           jumlah_ramen -= jumlah_kuah;
+           
+       }while (jumlah_ramen > 0);
+        
+    }else {
+        System.out.print("Keterangan [-jika kososng] :  ");
+        keterangan = input.next();
+    }
+    
+    if (!keterangan.equals("-")) {
+        pesanan.setKeterangan(keterangan);
+    }
+    
+    // konfirmasi , mau tambah pesanan atau tidak 
+    System.out.print ("Tambah Pesanan lagi? [Y/N}] : ");
+    pesan_lagi = input.next();
+} while (pesan_lagi.equalsIgnoreCase("Y"));
+
+    
+    
+    
+    
+    
+
     
 public void generateDaftarMenu () {
+     
     daftarMenu = new DaftarMenu ();
+     
     
 daftarMenu.tambahMenu (new Ramen("Ramen Seafood", 25000));
 daftarMenu.tambahMenu (new Ramen("Ramen Original ", 18000));
@@ -61,15 +162,20 @@ daftarMenu.tambahMenu (new Minuman ("Capucino Coffee", 15000) );
 daftarMenu.tambahMenu (new Minuman ("Vietnam Dripp", 14000));
         
 daftarMenu.tampilDaftarMenu ();
-    }     
-
- public static void main(String[] args) { 
-    
-        Scanner input = new Scanner (System.in);
-        
-        MainAplikasiKasir app = new MainAplikasiKasir ();
-        
-        app.generateDaftarMenu();
     }
-
+public double cekInputNumber(String label ){
+ try {
+     Scanner get_input = new Scanner (System.in);
+     System.out.print(label);
+     double nilai = get_input.nextDouble();
+     
+     return nilai;
+ }catch(InputMismacthException err){
+     System.out.println("[Err] Harap masukkan angka");
+     return cekInputNumber(label);
+     
+ }
+ }   
+}
+    
 }
