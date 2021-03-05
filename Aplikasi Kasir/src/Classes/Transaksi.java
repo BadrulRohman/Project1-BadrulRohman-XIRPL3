@@ -20,6 +20,7 @@ public class Transaksi {
     private double uangBayar;
     private double pajak;
     private double totalBayar;
+    private double biayaService;
     
     public Transaksi (String no_transaksi, String nm_pemesan, String tanggal, String no_meja) { 
     this.noTransaksi = no_transaksi;
@@ -37,18 +38,78 @@ public class Transaksi {
     public ArrayList<Pesanan> getSemuaPesanan() {
         return pesanan;}
     
-    public double hitungTotalBayar () {
-        for {int i =0; i<pesanann.size(); i++) {
-            Pesanan psn + pesanan.get(i);
-            double harga - psn.getMenu().getHarga();
-            totalBayar += (harga * psn.getJumlah());
+    public double hitungTotalPesanan () {
+        for (int i =0; i < pesanan.size(); i++) {
+          Pesanan psn = pesanan.get(i);
+          double harga = psn.getMenu().getHarga();
+          totalBayar += (harga * psn.getJumlah());
         }
-        return TotalBayar;}
+        return totalBayar;
+    }
+    
+    public double hitungPajak(){
+        return totalBayar * pajak;
+    }
+    public double hitungBiayaService(){
+        return totalBayar * biayaService;
+    }
+    
+    public double hitungTotalBayar (double pajak, double service){
+        totalBayar = totalBayar + pajak + service;
+        return totalBayar;
+    }
+    
+    public double hitungKembalian (double uang_bayar){
+            return uang_bayar - totalBayar; 
+    }
+    
+    
     
     public double hitungKembalian() {return 0;}
     
-    public void cetakStruk () {  }
+    public void cetakStruk () {  
+        System.out.println("\n========= ALDEBARAMEN =======");
+        System.out.println("No Transaksi  :" + noTransaksi);
+        System.out.println("Pemesan  :" + namaPemesan);
+        System.out.println("Tanggal  :" + Tanggal);
+        
+        // cek jika nomor meja kososng berarti take awway
+        
+        if(noMeja.equals("")){
+            noMeja = "Take Away";
+        } 
+        
+        System.out.println("Meja : "+ noMeja);
+                System.out.println("=========");
+                
+          for (int i =0; i < pesanan.size(); i++) {
+            Pesanan psn  = pesanan.get(i);
+            Menu m = psn.getMenu();
+        String pesanan = psn.getJumlah() + " " + m.getNama_menu() + "\t" 
+                + (m.getHarga() * psn.getJumlah());
+          
+          
+          if ( m.getKategori().equals("Kuah")){
+              pesanan = " " + pesanan;
+              
+          }
+          System.out.println(pesanan);
+          }
+          
+            
+     }
+    
+       //tambahkan
+    
+    public void setPajak (double pajak){
+        this.pajak = pajak;
+    }
+                public void setBIayaService (double service){
+                    this.biayaService = service;
+                }
+                                
+  }
     
     
     
-}
+

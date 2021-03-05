@@ -5,7 +5,7 @@
  */
 package Classes;
 
-
+import java.util.InputMismatchException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -47,7 +47,7 @@ public class DaftarMenu {
 //get menu berdasarkan no_menu, di -1 karena arrayList mulai dari0
 Menu m = daftarMenu.get(no_menu-1) ;
 //cek apakah menu kuah?
-if (m.getKategori().equalsIgnoreCase ("Kuah ")) {
+if (!m.getKategori().equalsIgnoreCase ("Kuah ")) {
      return m;
 }else {
     
@@ -56,21 +56,17 @@ if (m.getKategori().equalsIgnoreCase ("Kuah ")) {
     return pilihMenu ();
     }
     
-    }catch ( IndexOutOfBoundsException err){
-        //jika no_menu tidak ada, makan akan masuk ke sini
-        //no_menu dianggap tidak ada ketika no_menu diluar dari index pada arrayList
-
-        System.out.println("[Err] Pesanan Tidak Tersedia");
-        //jika tidak ada, maka user akan diminta untuk mengulang memasukk an nomor menu
-        //teknik ini disebut dengan rekursif
-    return pilihMenu ();
-    }
-    }catch(InputMismacthException err){
-    //jika input bukan berupa angka akan masuk kesini
-    System.out.println (" [Err] Mohon masukkan nomor menu");
-    return pilihMenu ();
-    }    
+       }catch(IndexOutOfBoundsException err){
+           
+           System.out.println("[Err] Pesan dulu menu ramen");
+           return pilihMenu();
+    }catch(InputMismatchException err) {
+    
+    System.out.println("[Err] Mohon masukkan nomor kuah");
+    return pilihMenu();}
+    
 }
+       
     
 
     public Menu pilihKuah(){
@@ -93,16 +89,18 @@ if (m.getKategori().equalsIgnoreCase ("Kuah ")) {
                 // teknik ini disebur
                 
                 return pilihKuah();
+            }
                 
-        }catch ( IndexOutOfBoundsException err){
+        }catch (IndexOutOfBoundsException err){
                     // jik input bukan berupa angak makak akan disuruh memasnk=ukan angka
                     
                    System.out.println("[Err] Mohon Masukkan Nomor Kuah");
-               
-               return pilihKuah();}
-        }catch ( InputMismacthException  err) {
-            
-            System.out.println("[Err] mohon masukkan nomor kuah ");
-            return pilihKuah();
-        }
+                   return pilihKuah();
+       }catch(InputMismatchException err){
+           
+           System.out.println("[Err] Mohon masukkan nomor kuah");
+        return pilihKuah(); 
        }
+       
+    } 
+}

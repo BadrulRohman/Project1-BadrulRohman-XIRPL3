@@ -85,8 +85,9 @@ do{
         int jumlah_ramen = jumlah_pesanan;
         
        do{
-           
-           Menu kuah_yang_dipilih = app.daftarMenu.pilihKuah();
+          // ambil objek menu berdasarkan nomor dipilih 
+          Menu kuah_yang_dipilih = app.daftarMenu.pilihKuah();
+          
            
            System.out.print("Level : [0-5] : ");
            String level =input.next();
@@ -131,13 +132,48 @@ do{
     pesan_lagi = input.next();
 } while (pesan_lagi.equalsIgnoreCase("Y"));
 
-    
-    
-    
-    
-    
+//cetak struk
 
+trans.cetakStruk();
+
+   //hitung total harga
+double total_pesanan = trans.hitungTotalPesanan();
+System.out.println( "==================");
+System.out.println("Total : \t\t" + total_pesanan);
+
+    //hitung pajak
+   
+    trans.setPajak(PAJAK_PPN);
+    double ppn = trans.hitungPajak();
+    System.out.println("Pajak 10 % : \t\t " + ppn);
     
+    double biaya_service = 0;
+    if(makan_ditempat.equalsIgnoreCase("Y")){
+        trans.setBIayaService(BIAYA_SERVICE);
+        biaya_service = trans.hitungBiayaService();
+        System.out.println("Total : \t\t" +trans.hitungTotalBayar(ppn, biaya_service));
+    }
+    
+    double kembalian = 0;
+    do{
+        double uang_bayar = app.cekInputNumber("Uang Bayar : \t\t");
+        
+        kembalian = trans.hitungKembalian(uang_bayar);
+        if(kembalian<0) {
+            System.out.println("[Err] Uang anda kurang");
+        }else{
+            System.out.println("Kembalian  : \t\t" + kembalian);
+            break;
+        }  
+    }while (kembalian < 0);
+    
+    System.out.println("Lakukan Tansakasi LAgi?");
+    transaksi_lagi = input.next();
+}while(transaksi_lagi.equalsIgnoreCase("Y"));
+
+System.out.println("===== TERIMA KASIH =====");
+}
+   
 public void generateDaftarMenu () {
      
     daftarMenu = new DaftarMenu ();
@@ -170,12 +206,11 @@ public double cekInputNumber(String label ){
      double nilai = get_input.nextDouble();
      
      return nilai;
- }catch(InputMismacthException err){
-     System.out.println("[Err] Harap masukkan angka");
+ }catch(InputMismatchException ex){
+     System.out.println("[Err] Harap massukan angka");
      return cekInputNumber(label);
+ }
      
  }
- }   
-}
-    
-}
+ }
+
