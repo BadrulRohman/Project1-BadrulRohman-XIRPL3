@@ -166,7 +166,7 @@ System.out.println("Total : \t\t" + total_pesanan);
             break;
         }  
     }while (kembalian < 0);
-    
+    // jiak ingin transaksi ulang
     System.out.println("Lakukan Tansakasi LAgi?");
     transaksi_lagi = input.next();
 }while(transaksi_lagi.equalsIgnoreCase("Y"));
